@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from .forms import memberform
+from .forms import memberform,memberdetailform,MemberJobform,Memberphoneform,MemberEmailform
 from .models import *
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -15,7 +15,7 @@ def inicio (request):
 
 class membersList(ListView):
     template_name = "administrativeApp/List_members.html"
-    paginate_by = 5
+    paginate_by = 4
     context_object_name = 'listMembers'
     
     def get_queryset(self):
@@ -25,14 +25,14 @@ class membersList(ListView):
 class memberDetail(DetailView):
     model = TlbMemberDetail
     template_name = "administrativeApp/member_detail.html"
-    
+   # lookup_field = 'id_member'
 
-# class membernew(CreateView):
-#     model = TlbMembers
-#     success_url = "../member_detail_new/"
-#     fields=['id_member','member_name', 'status_memb' ]
-    
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return TlbMemberDetail.objects.get(id_member=kw_id)    
 
+    
 class membernew(CreateView):
     model = TlbMembers
     form_class= memberform
@@ -46,5 +46,50 @@ class membernew(CreateView):
 
 class memberdetailnew(CreateView):
     model = TlbMemberDetail
-    success_url = "../members/"
-    fields=['id_member','date_bith', 'direction', 'civil_status', 'dependents' ]
+    form_class= memberdetailform
+    template_name = 'administrativeApp/TlbMemberDetail_form.html'
+    success_url = reverse_lazy('new_member_detail')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'DATOS PERSONALES'
+        return context
+
+
+# class memberdetailnew(CreateView):
+#     model = TlbMemberDetail
+#     success_url = "../members/"
+#     fields=['id_member','date_bith', 'direction', 'civil_status', 'dependents' ]
+
+class MemberJobnew(CreateView):
+    model = TlbMemberJob
+    form_class= MemberJobform
+    template_name = 'administrativeApp/TlbMemberJob_form.html'
+    success_url = reverse_lazy('new_Member_Job')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'DATOS LABORALES'
+        return context
+
+class Memberphonenew(CreateView):
+    model = tlb_member_phone
+    form_class= Memberphoneform
+    template_name = 'administrativeApp/TlbMemberPhone_form.html'
+    success_url = reverse_lazy('new_Member_phone')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'DATOS DE CONTACTO'
+        return context
+    
+class MemberEmailnew(CreateView):
+    model = TlbMemberEmail
+    form_class= MemberEmailform
+    template_name = 'administrativeApp/TlbMemberEmail.html'
+    success_url = reverse_lazy('new_Member_email')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'DATOS DE CONTACTO'
+        return context    

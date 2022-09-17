@@ -4,14 +4,17 @@
 
 <section class="container-fluid ">
 
-    <h1>{{ TlbMemberDetail.id_member }}</h1>
-    <p>{{ TlbMemberDetail.date_bith }}</p>
-    <p>{{ TlbMemberDetail.reporter }}</p>
-    <p>{{ TlbMemberDetail.direction }}</p>
-    <p>{{ TlbMemberDetail.direction }}</p>
-    <p>{{ TlbMemberDetail.direction }}</p>
-
-
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">DNI : {{ object.id_member.id_member }}</li>
+        <li class="list-group-item">Nombre y apellido : {{ object.id_member.name }} </li>
+        <li class="list-group-item">Fecha de nacimiento: {{ object.date_bith }}</li>
+        <li class="list-group-item">Domicilio: {{ object.direction }}</li>
+        <li class="list-group-item">Estado civil: {{ object.civil_status.desc_civil }}</li>
+        <li class="list-group-item">Hijos: {{ object.dependents }}</li>
+    </ul>
+    <div class="d-grid gap-2 col-4 mx-auto">
+        <a class="btn btn-primary"  href="{% url 'members' %}">Inicio</a>
+    </div >   
 </section>
 
 {% endblock contenido %}
