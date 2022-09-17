@@ -1,0 +1,80 @@
+{% extends 'administrativeApp/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<section class="container-fluid ">
+
+  <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        NUEVO
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'new_member' %}">Nuevo Miembro</a></li>
+        <li><a class="dropdown-item" href="#">Nuevo Detalle</a></li>
+        <li><a class="dropdown-item" href="#">Nuevo Telefono</a></li>
+        <li><a class="dropdown-item" href="#">Nuevo Correo</a></li>
+      </ul>
+    </div>
+  </div>
+  
+    <table class="table">
+              
+        <thead>
+          <tr>
+            <th scope="col">DNI</th>
+            <th scope="col">NOMBRE Y APELLIDO</th>
+            <th scope="col">FECHA DE NACIMIENTO</th>
+            <th scope="col">DIRECCION</th>
+            <th scope="col">Estado Civil</th>
+            <th scope="col">Hijos</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        {% for member  in listMembers %}
+        <tbody>
+ 
+          <tr>
+            <td>{{member.id_member.id_member}}</td>
+            <td>{{member.id_member.member_name}}</td>
+            <td>{{member.date_bith}}</td>
+            <td>{{member.direction}}</td>
+            <td>{{member.civil_status.desc_civil}}</td>
+            <td>{{member.dependents}}</td>
+            <td>
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Ver Mas
+                </button>
+                <ul class="dropdown-menu">
+                  <li><button href="{% url 'member_detail' member.id_member.id_member %}" class="dropdown-item" type="button">Trabajo</button></li>
+                  <li><button class="dropdown-item" type="button">Telefono</button></li>
+                  <li><button class="dropdown-item" type="button">Correo</button></li>
+                </ul>
+                
+              </div>
+              
+            </td>
+            <td>
+              <div class="dropdown">
+                  <button class="btn btn-outline-danger  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Acciones
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><button class="dropdown-item" type="button">Eliminar</button></li>
+                    <li><button class="dropdown-item" type="button">Modificar</button></li>
+                  </ul>
+                  
+                </div>
+                
+              </td>
+          </tr>
+ 
+        </tbody>
+        {% endfor %}     
+      </table>
+
+</section>
+
+{% endblock contenido %}
