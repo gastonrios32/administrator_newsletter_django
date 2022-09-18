@@ -25,13 +25,40 @@ class membersList(ListView):
 class memberDetail(DetailView):
     model = TlbMemberDetail
     template_name = "administrativeApp/member_detail.html"
-   # lookup_field = 'id_member'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
-        return TlbMemberDetail.objects.get(id_member=kw_id)    
+        return TlbMemberDetail.objects.get(id_member=kw_id) 
+    
+class memberDetail_job(DetailView):
+    model = TlbMemberJob
+    template_name = "administrativeApp/member_detail_job.html"
 
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return TlbMemberJob.objects.get(id_member=kw_id)       
+    
+class memberDetail_phone(DetailView):
+    model = tlb_member_phone
+    template_name = "administrativeApp/member_detail_phone.html"
+
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return tlb_member_phone.objects.get(id_member=kw_id)    
+    
+class memberDetail_email(DetailView):
+    model = TlbMemberEmail
+    template_name = "administrativeApp/member_detail_email.html"
+
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return TlbMemberEmail.objects.get(id_member=kw_id)            
+
+#CREATE VIEW
     
 class membernew(CreateView):
     model = TlbMembers
@@ -56,10 +83,6 @@ class memberdetailnew(CreateView):
         return context
 
 
-# class memberdetailnew(CreateView):
-#     model = TlbMemberDetail
-#     success_url = "../members/"
-#     fields=['id_member','date_bith', 'direction', 'civil_status', 'dependents' ]
 
 class MemberJobnew(CreateView):
     model = TlbMemberJob
@@ -93,3 +116,4 @@ class MemberEmailnew(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'DATOS DE CONTACTO'
         return context    
+

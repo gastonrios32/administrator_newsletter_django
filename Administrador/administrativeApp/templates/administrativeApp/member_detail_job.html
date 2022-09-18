@@ -6,10 +6,10 @@
 
     <ul class="list-group list-group-flush">
         <li class="list-group-item">DNI : {{ object.id_member.id_member }}</li>
-        <li class="list-group-item">Fecha de nacimiento: {{ object.date_bith }}</li>
+        <li class="list-group-item">Puesto de trabajo: {{ object.id_position.desc_position }}</li>
+        <li class="list-group-item">Fecha de ingreso: {{ object.date_entry }}</li>
         <li class="list-group-item">Domicilio: {{ object.direction }}</li>
-        <li class="list-group-item">Estado civil: {{ object.civil_status.desc_civil }}</li>
-        <li class="list-group-item">Hijos: {{ object.dependents }}</li>
+        <li class="list-group-item">Nombre de la empresa: {{ object.job_name }}</li>
     </ul>
     <div class="d-grid gap-2 col-4 mx-auto">
         <a class="btn btn-primary"  href="{% url 'members' %}">Inicio</a>

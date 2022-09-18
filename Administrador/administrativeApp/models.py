@@ -57,9 +57,11 @@ class TlbMemberJob(models.Model):
     direction = models.CharField(max_length=250, blank=True, null=True)
     job_name = models.CharField(db_column='Job_name', max_length=150, blank=True, null=True)  # Field name made lowercase.
 
+
     class Meta:
         managed = False
         db_table = 'tlb_member_job'
+        ordering = ['id_member']
     
     def __str__(self):
         return f'{self.job_id} - {self.id_member} - {self.id_position} - {self.date_entry} - {self.direction}  - {self.job_name}  '    

@@ -16,32 +16,25 @@
         <li><a class="dropdown-item" href="{% url 'new_Member_phone' %}">Telefono</a></li>
         <li><a class="dropdown-item" href="{% url 'new_Member_email' %}">Correo</a></li>
       </ul>
+      
     </div>
   </div>
   
     <table class="table">
               
         <thead>
-          <tr>
+          <tr class="table-success">
             <th scope="col">DNI</th>
             <th scope="col">NOMBRE Y APELLIDO</th>
-            <th scope="col">FECHA DE NACIMIENTO</th>
-            <th scope="col">DIRECCION</th>
-            <th scope="col">Estado Civil</th>
-            <th scope="col">Hijos</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
         </thead>
         {% for member  in listMembers %}
         <tbody>
- 
           <tr>
             <td>{{member.id_member.id_member}}</td>
             <td>{{member.id_member.member_name}}</td>
-            <td>{{member.date_bith}}</td>
-            <td>{{member.civil_status.desc_civil}}</td>
-            <td>{{member.dependents}}</td>
             <td>
             <div class="dropdown">
                 <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -49,9 +42,9 @@
                 </button>
                 <ul class="dropdown-menu">
                   <li><a href="{% url 'member_detail' member.id_member.id_member %}" class="dropdown-item" type="button">Datos Personales</a></li>
-                  <li><a href="{% url 'member_detail' member.id_member.id_member %}" class="dropdown-item" type="button">Datos Laborales</a></li>                  
-                  <li><button class="dropdown-item" type="button">Telefono</button></li>
-                  <li><button class="dropdown-item" type="button">Correo</button></li>
+                  <li><a href="{% url 'member_detail_job' member.id_member.id_member %}" class="dropdown-item" type="button">Datos Laborales</a></li>                  
+                  <li><a href="{% url 'member_detail_phone' member.id_member.id_member %}" class="dropdown-item" type="button">Telefono</a></li>   
+                  <li><a href="{% url 'member_detail_email' member.id_member.id_member %}" class="dropdown-item" type="button">Correo</a></li>   
                 </ul>
                 
               </div>
@@ -83,7 +76,7 @@
             {% endif %}
 
             <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
             </span>
 
             {% if page_obj.has_next %}
