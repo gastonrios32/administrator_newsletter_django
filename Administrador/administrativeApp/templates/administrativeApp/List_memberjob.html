@@ -37,30 +37,23 @@
           <tr class="table-success">
             <th scope="col">DNI</th>
             <th scope="col">NOMBRE Y APELLIDO</th>
-            <th scope="col"></th>
+            <th scope="col">PUESTO</th>
+            <th scope="col">FECHA DE INGRESO</th>
+            <th scope="col">DIRECCION LABORAL</th>
+            <th scope="col">NOMBRE DE LA EMPRESA</th>
             <th scope="col"></th>
           </tr>
         </thead>
-        {% for member  in listMembers %}
+        {% for member  in listMemberjob %}
         <tbody>
           <tr>
             <td>{{member.id_member.id_member}}</td>
             <td>{{member.id_member.member_name}}</td>
-            <td>
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Ver Mas
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url 'member_detail' member.id_member.id_member %}" class="dropdown-item" type="button">Datos Personales</a></li>
-                  <li><a href="{% url 'member_detail_job' member.id_member.id_member %}" class="dropdown-item" type="button">Datos Laborales</a></li>                  
-                  <li><a href="{% url 'member_detail_phone' member.id_member.id_member %}" class="dropdown-item" type="button">Telefono</a></li>   
-                  <li><a href="{% url 'member_detail_email' member.id_member.id_member %}" class="dropdown-item" type="button">Correo</a></li>   
-                </ul>
-                
-              </div>
-              
-            </td>
+            <td>{{member.id_position.desc_position}}</td>
+            <td>{{member.date_entry}}</td>
+            <td>{{member.direction}}</td>
+            <td>{{member.job_name}}</td>
+
             <td>
               <div class="dropdown">
                   <button class="btn btn-outline-danger  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -68,7 +61,7 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li><button class="dropdown-item" type="button">Eliminar</button></li>
-                    <li><a  class="dropdown-item" href="{% url 'member_update' member.id_member.id_member %}" type="button">Modificar</a></li>
+                    <li><a  class="dropdown-item" href="{% url 'member_job_update' member.id_member.id_member %}" type="button">Modificar</a></li>
                   </ul>
                   
                 </div>

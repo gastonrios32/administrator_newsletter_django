@@ -1,0 +1,25 @@
+{% extends 'administrativeApp/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<section class="container-fluid ">
+
+    <div class="card text-center">
+        <div class="card-header">
+            {{ title }}
+        </div>
+        <div class="card-body">
+            <form method="POST" class="form-control">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <input class="btn btn-primary" type="submit" value="EDITAR" />
+                    <a class="btn btn-primary"  href="{% url 'members' %}">Inicio</a>
+                </div >     
+        </form>
+        </div>
+      </div>
+
+</section>
+
+{% endblock contenido %}

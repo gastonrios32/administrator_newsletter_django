@@ -22,6 +22,42 @@ class membersList(ListView):
         queryset = TlbMemberDetail.objects.select_related('id_member')
         return queryset
 
+class memberDetailList(ListView):
+    template_name = "administrativeApp/List_memberdetail.html"
+    paginate_by = 4
+    context_object_name = 'listMemberdetail'
+    
+    def get_queryset(self):
+        queryset = TlbMemberDetail.objects.select_related('id_member')
+        return queryset   
+    
+class memberjobList(ListView):
+    template_name = "administrativeApp/List_memberjob.html"
+    paginate_by = 4
+    context_object_name = 'listMemberjob'
+    
+    def get_queryset(self):
+        queryset = TlbMemberJob.objects.select_related('id_member')
+        return queryset
+
+class memberphoneList(ListView):
+    template_name = "administrativeApp/List_memberphone.html"
+    paginate_by = 4
+    context_object_name = 'listMemberphone'
+    
+    def get_queryset(self):
+        queryset = tlb_member_phone.objects.select_related('id_member')
+        return queryset
+
+class memberemailList(ListView):
+    template_name = "administrativeApp/List_memberemail.html"
+    paginate_by = 4
+    context_object_name = 'listMemberemail'
+    
+    def get_queryset(self):
+        queryset = TlbMemberEmail.objects.select_related('id_member')
+        return queryset   
+
 class memberDetail(DetailView):
     model = TlbMemberDetail
     template_name = "administrativeApp/member_detail.html"
@@ -117,3 +153,57 @@ class MemberEmailnew(CreateView):
         context['title'] = 'DATOS DE CONTACTO'
         return context    
 
+class MemberUpdate (UpdateView):
+    model = TlbMembers
+    fields = ['member_name','status_memb']
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('members')
+    
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return TlbMembers.objects.get(id_member=kw_id)    
+    
+class MemberDetailUpdate (UpdateView):
+    model = TlbMemberDetail
+    fields = ['date_bith','direction','civil_status','dependents']
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('members')
+    
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return TlbMemberDetail.objects.get(id_member=kw_id)  
+    
+class MemberPhoneUpdate (UpdateView):
+    model = tlb_member_phone
+    fields = ['phone1','type_phone','status_fone']
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('members')
+    
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return tlb_member_phone.objects.get(id_member=kw_id)          
+    
+class MemberJobUpdate (UpdateView):
+    model = TlbMemberJob
+    fields = ['id_position','date_entry','direction','job_name']
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('members')
+    
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return TlbMemberJob.objects.get(id_member=kw_id)           
+    
+class MemberEmailUpdate (UpdateView):
+    model = TlbMemberEmail
+    fields = ['email']
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('members')
+    
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_member')
+        return TlbMemberEmail.objects.get(id_member=kw_id)         

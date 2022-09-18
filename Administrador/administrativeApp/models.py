@@ -37,7 +37,7 @@ class TlbMemberEmail(models.Model):
     id_email = models.AutoField(primary_key=True)
     #id_member = models.ForeignKey('TlbMembers', models.DO_NOTHING, db_column='id_member')
     id_member = models.ForeignKey('TlbMembers', on_delete=models.CASCADE,db_column='id_member')    
-    email = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=False, null=False)
 
     class Meta:
         managed = False
