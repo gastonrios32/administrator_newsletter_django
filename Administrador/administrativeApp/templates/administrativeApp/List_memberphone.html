@@ -58,8 +58,8 @@
                     Acciones
                   </button>
                   <ul class="dropdown-menu">
-                    <li><button class="dropdown-item" type="button">Eliminar</button></li>
-                    <li><a  class="dropdown-item" href="{% url 'member_phone_update' member.id_member.id_member %}" type="button">Modificar</a></li>
+                    <li><a  class="dropdown-item" href="{% url 'member_phone_delete' member.id_contact %}" type="button">Eliminar</a></li>
+                    <li><a  class="dropdown-item" href="{% url 'member_phone_update' member.id_contact %}" type="button">Modificar</a></li>
                   </ul>
                   
                 </div>

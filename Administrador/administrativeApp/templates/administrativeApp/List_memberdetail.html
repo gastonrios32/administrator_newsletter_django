@@ -32,7 +32,7 @@
   </div>
   <p></p>
     <table class="table">
-              
+      <h3>LISTADO DE DATOS PERSONALES</h3>        
         <thead>
           <tr class="table-success">
             <th scope="col">DNI</th>
@@ -55,20 +55,9 @@
             <td>{{member.dependents}}</td>
 
             <td>
-              <div class="dropdown">
-                  <button class="btn btn-outline-danger  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Acciones
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><button class="dropdown-item" type="button">Eliminar</button></li>
-                    <li><a  class="dropdown-item" href="{% url 'member_detail_update' member.id_member.id_member %}" type="button">Modificar</a></li>
-                  </ul>
-                  
-                </div>
-                
-              </td>
+              <a  class="btn btn-outline-danger" href="{% url 'member_detail_update' member.id_member.id_member %}" type="button">Modificar</a>
+            </td>
           </tr>
- 
         </tbody>
         {% endfor %}     
       </table>

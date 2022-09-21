@@ -62,6 +62,7 @@ class memberDetail(DetailView):
     model = TlbMemberDetail
     template_name = "administrativeApp/member_detail.html"
 
+
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
@@ -71,10 +72,13 @@ class memberDetail_job(DetailView):
     model = TlbMemberJob
     template_name = "administrativeApp/member_detail_job.html"
 
+
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
-        return TlbMemberJob.objects.get(id_member=kw_id)       
+        return TlbMemberJob.objects.get(id_member=kw_id)      
+    
+
     
 class memberDetail_phone(DetailView):
     model = tlb_member_phone
@@ -168,7 +172,7 @@ class MemberDetailUpdate (UpdateView):
     model = TlbMemberDetail
     fields = ['date_bith','direction','civil_status','dependents']
     template_name_suffix = '_update_form'
-    success_url = reverse_lazy('members')
+    success_url = reverse_lazy('member_detail_list')
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -179,31 +183,77 @@ class MemberPhoneUpdate (UpdateView):
     model = tlb_member_phone
     fields = ['phone1','type_phone','status_fone']
     template_name_suffix = '_update_form'
-    success_url = reverse_lazy('members')
+    success_url = reverse_lazy('member_phone_list')
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
-        kw_id = kwargs.get('id_member')
-        return tlb_member_phone.objects.get(id_member=kw_id)          
+        kw_id = kwargs.get('id_contact')
+        return tlb_member_phone.objects.get(id_contact=kw_id)          
     
 class MemberJobUpdate (UpdateView):
     model = TlbMemberJob
     fields = ['id_position','date_entry','direction','job_name']
     template_name_suffix = '_update_form'
-    success_url = reverse_lazy('members')
+    success_url = reverse_lazy('member_job_list')
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
-        kw_id = kwargs.get('id_member')
-        return TlbMemberJob.objects.get(id_member=kw_id)           
+        kw_id = kwargs.get('job_id')
+        return TlbMemberJob.objects.get(job_id=kw_id)           
     
 class MemberEmailUpdate (UpdateView):
     model = TlbMemberEmail
     fields = ['email']
     template_name_suffix = '_update_form'
-    success_url = reverse_lazy('members')
+    success_url = reverse_lazy('member_email_list')
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
+        kw_id = kwargs.get('id_email')
+        return TlbMemberEmail.objects.get(id_email=kw_id)         
+
+class memberdelete(DeleteView):
+    model = TlbMembers
+    success_url=reverse_lazy('members')
+    template_name='administrativeApp/member_delete.html'
+    success_message='The member has been deleted successfully.'
+
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
-        return TlbMemberEmail.objects.get(id_member=kw_id)         
+        return TlbMembers.objects.get(id_member=kw_id)    
+    
+class memberJobdelete(DeleteView):
+    model = TlbMemberJob
+    success_url=reverse_lazy('member_job_list')
+    template_name='administrativeApp/member_job_delete.html'
+    success_message='The member has been deleted successfully.'
+
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('job_id')
+        return TlbMemberJob.objects.get(job_id=kw_id)  
+    
+class memberPhonedelete(DeleteView):
+    model = tlb_member_phone
+    success_url=reverse_lazy('member_phone_list')
+    template_name='administrativeApp/member_phone_delete.html'
+    success_message='The member has been deleted successfully.'
+
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_contact')
+        return tlb_member_phone.objects.get(id_contact=kw_id)  
+    
+    
+class memberEmaildelete(DeleteView):
+    model = TlbMemberEmail
+    success_url=reverse_lazy('member_email_list')
+    template_name='administrativeApp/member_email_delete.html'
+    success_message='The member has been deleted successfully.'
+
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_email')
+        return TlbMemberEmail.objects.get(id_email=kw_id)              
+

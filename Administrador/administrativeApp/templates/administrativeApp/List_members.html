@@ -32,7 +32,7 @@
   </div>
   <p></p>
     <table class="table">
-              
+        <h3>LISTADO DE MIEMBROS</h3>     
         <thead>
           <tr class="table-success">
             <th scope="col">DNI</th>
@@ -67,7 +67,7 @@
                     Acciones
                   </button>
                   <ul class="dropdown-menu">
-                    <li><button class="dropdown-item" type="button">Eliminar</button></li>
+                    <li><a  class="dropdown-item" href="{% url 'member_delete' member.id_member.id_member %}" type="button">Eliminar</a></li>
                     <li><a  class="dropdown-item" href="{% url 'member_update' member.id_member.id_member %}" type="button">Modificar</a></li>
                   </ul>
                   

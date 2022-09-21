@@ -1,0 +1,18 @@
+{% extends 'administrativeApp/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<div class="card text-center">
+    <div class="card-header">
+        BORRAR NUMERO
+    </div>
+    <div class="card-body">
+        <form method="POST">{% csrf_token %}
+        <h5 class="card-title">¿ESTAS SEGURO QUE DESEAS BORRAR NUMERO :"{{ object.phone1 }}" ?</h5>
+        <p class="card-text">Una vez confirmada se borrara toda la informacion relacionada</p>
+        <input class="btn btn-secondary" type="submit" value="CONFIRMAR" />
+        </form>
+    </div>
+</div>
+
+{% endblock contenido %}

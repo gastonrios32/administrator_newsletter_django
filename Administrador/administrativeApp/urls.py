@@ -27,10 +27,13 @@ path('member_email_new/',views.MemberEmailnew.as_view(), name="new_Member_email"
 
 path('member_update/<int:id_member>/',views.MemberUpdate.as_view(), name="member_update" ),
 path('member_detail_update/<int:id_member>/',views.MemberDetailUpdate.as_view(), name="member_detail_update" ),
-path('member_job_update/<int:id_member>/',views.MemberJobUpdate.as_view(), name="member_job_update" ),
-path('member_phone_update/<int:id_member>/',views.MemberPhoneUpdate.as_view(), name="member_phone_update" ),
-path('member_email_update/<int:id_member>/',views.MemberEmailUpdate.as_view(), name="member_email_update" ),
+path('member_job_update/<int:job_id>/',views.MemberJobUpdate.as_view(), name="member_job_update" ),
+path('member_phone_update/<int:id_contact>/',views.MemberPhoneUpdate.as_view(), name="member_phone_update" ),
+path('member_email_update/<int:id_email>/',views.MemberEmailUpdate.as_view(), name="member_email_update" ),
 
 #DELETEVIEW
-
+path('member_delete/<int:id_member>/',views.memberdelete.as_view(), name="member_delete" ),
+path('member_job_delete/<int:job_id>/',views.memberJobdelete.as_view(), name="member_job_delete" ),
+path('member_phone_delete/<int:id_contact>/',views.memberPhonedelete.as_view(), name="member_phone_delete" ),
+path('member_email_delete/<int:id_email>/',views.memberEmaildelete.as_view(), name="member_email_delete" ),
 ]
