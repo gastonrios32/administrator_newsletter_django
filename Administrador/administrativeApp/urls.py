@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 urlpatterns = [
-path('',views.inicio, name = 'inicio'),
+path('',views.inicio_administrador, name = 'inicio_administrador'),
 
 #LISTVIEW
 path('members/',views.membersList.as_view(), name="members" ),

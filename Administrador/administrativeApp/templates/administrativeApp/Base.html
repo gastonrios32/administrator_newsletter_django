@@ -6,11 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title></title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     </head>
     <body>
         <header class="navbar  bg-success text-white bg-opacity-50 ">
                 <div class="container-fluid ">
-                    <a class="nav-link active text-dark fw-bold " aria-current="page" href="#">Home</a>
+                    <a class="nav-link active text-dark fw-bold " aria-current="page" href="#"><i class="bi bi-house-door-fill" ></i></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -22,10 +23,13 @@
                     <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" href="{% url 'inicio_administrador'  %}">Ir al inicio</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'members'  %}">Ir al administrador</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">ir a newsletter</a>
                         </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

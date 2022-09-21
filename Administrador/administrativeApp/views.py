@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView,DeleteView,UpdateView
 
 # Create your views here.
 
-def inicio (request):
+def inicio_administrador (request):
 
     return render(request, 'administrativeApp/index.html')
 
