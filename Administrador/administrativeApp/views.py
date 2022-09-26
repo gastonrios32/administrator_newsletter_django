@@ -5,6 +5,7 @@ from .models import *
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView,DeleteView,UpdateView
+from django.contrib import messages
 
 # Create your views here.
 
@@ -110,6 +111,10 @@ class membernew(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'CREACION NUEVO MIEMBRO'
         return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'Account created successfully')
+        return super().form_valid(form)    
 
 class memberdetailnew(CreateView):
     model = TlbMemberDetail
@@ -122,7 +127,9 @@ class memberdetailnew(CreateView):
         context['title'] = 'DATOS PERSONALES'
         return context
 
-
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron cargados ')
+        return super().form_valid(form)   
 
 class MemberJobnew(CreateView):
     model = TlbMemberJob
@@ -135,6 +142,10 @@ class MemberJobnew(CreateView):
         context['title'] = 'DATOS LABORALES'
         return context
 
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron cargados ')
+        return super().form_valid(form)      
+
 class Memberphonenew(CreateView):
     model = tlb_member_phone
     form_class= Memberphoneform
@@ -146,6 +157,9 @@ class Memberphonenew(CreateView):
         context['title'] = 'DATOS DE CONTACTO'
         return context
     
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron cargados ')
+        return super().form_valid(form)      
 class MemberEmailnew(CreateView):
     model = TlbMemberEmail
     form_class= MemberEmailform
@@ -157,6 +171,10 @@ class MemberEmailnew(CreateView):
         context['title'] = 'DATOS DE CONTACTO'
         return context    
 
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron cargados ')
+        return super().form_valid(form)      
+
 class MemberUpdate (UpdateView):
     model = TlbMembers
     fields = ['member_name','status_memb']
@@ -166,7 +184,11 @@ class MemberUpdate (UpdateView):
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
-        return TlbMembers.objects.get(id_member=kw_id)    
+        return TlbMembers.objects.get(id_member=kw_id) 
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron actualizados ')
+        return super().form_valid(form)  
     
 class MemberDetailUpdate (UpdateView):
     model = TlbMemberDetail
@@ -178,6 +200,10 @@ class MemberDetailUpdate (UpdateView):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
         return TlbMemberDetail.objects.get(id_member=kw_id)  
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron actualizados ')
+        return super().form_valid(form)      
     
 class MemberPhoneUpdate (UpdateView):
     model = tlb_member_phone
@@ -188,7 +214,11 @@ class MemberPhoneUpdate (UpdateView):
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_contact')
-        return tlb_member_phone.objects.get(id_contact=kw_id)          
+        return tlb_member_phone.objects.get(id_contact=kw_id)     
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron actualizados ')
+        return super().form_valid(form)           
     
 class MemberJobUpdate (UpdateView):
     model = TlbMemberJob
@@ -199,7 +229,11 @@ class MemberJobUpdate (UpdateView):
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('job_id')
-        return TlbMemberJob.objects.get(job_id=kw_id)           
+        return TlbMemberJob.objects.get(job_id=kw_id)   
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron actualizados ')
+        return super().form_valid(form)              
     
 class MemberEmailUpdate (UpdateView):
     model = TlbMemberEmail
@@ -210,50 +244,65 @@ class MemberEmailUpdate (UpdateView):
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_email')
-        return TlbMemberEmail.objects.get(id_email=kw_id)         
+        return TlbMemberEmail.objects.get(id_email=kw_id)   
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron actualizados ')
+        return super().form_valid(form)            
 
 class memberdelete(DeleteView):
     model = TlbMembers
     success_url=reverse_lazy('members')
     template_name='administrativeApp/member_delete.html'
-    success_message='The member has been deleted successfully.'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
         return TlbMembers.objects.get(id_member=kw_id)    
     
+    def form_valid(self, form):
+        messages.success(self.request, f'The member has been deleted successfully.')
+        return super().form_valid(form)      
+    
 class memberJobdelete(DeleteView):
     model = TlbMemberJob
     success_url=reverse_lazy('member_job_list')
     template_name='administrativeApp/member_job_delete.html'
-    success_message='The member has been deleted successfully.'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('job_id')
         return TlbMemberJob.objects.get(job_id=kw_id)  
-    
+
+    def form_valid(self, form):
+        messages.success(self.request, f'The member has been deleted successfully.')
+        return super().form_valid(form)        
 class memberPhonedelete(DeleteView):
     model = tlb_member_phone
     success_url=reverse_lazy('member_phone_list')
     template_name='administrativeApp/member_phone_delete.html'
-    success_message='The member has been deleted successfully.'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_contact')
         return tlb_member_phone.objects.get(id_contact=kw_id)  
+
+    def form_valid(self, form):
+        messages.success(self.request, f'The member has been deleted successfully.')
+        return super().form_valid(form)        
     
     
 class memberEmaildelete(DeleteView):
     model = TlbMemberEmail
     success_url=reverse_lazy('member_email_list')
     template_name='administrativeApp/member_email_delete.html'
-    success_message='The member has been deleted successfully.'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_email')
-        return TlbMemberEmail.objects.get(id_email=kw_id)              
+        return TlbMemberEmail.objects.get(id_email=kw_id)    
+
+    def form_valid(self, form):
+        messages.success(self.request, f'The member has been deleted successfully.')
+        return super().form_valid(form)                  
 

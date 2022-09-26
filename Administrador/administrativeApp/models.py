@@ -1,3 +1,4 @@
+from pickle import TRUE
 from django.db import models
 
 # Create your models here.
@@ -7,7 +8,7 @@ class TlbJobPosition(models.Model):
     desc_position = models.CharField(db_column='Desc_position', max_length=100)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tlb_job_Position'
         
     def __str__(self):
@@ -25,7 +26,7 @@ class TlbMemberDetail(models.Model):
     dependents = models.IntegerField(db_column='Dependents', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tlb_member_detail'
         ordering = ['id_member']
     
@@ -40,7 +41,7 @@ class TlbMemberEmail(models.Model):
     email = models.EmailField(max_length=254, blank=False, null=False)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tlb_member_email'
     
     def __str__(self):
@@ -59,7 +60,7 @@ class TlbMemberJob(models.Model):
 
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tlb_member_job'
         ordering = ['id_member']
     
@@ -76,7 +77,7 @@ class tlb_member_phone(models.Model):
     status_fone = models.IntegerField(blank=True, null=True,default= 1)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tlb_member_phone'
 
     def __str__(self):
@@ -87,9 +88,10 @@ class TlbMembers(models.Model):
     id_member = models.IntegerField(primary_key=True)
     member_name = models.CharField(max_length=100)
     status_memb = models.IntegerField(default= 1)
-
+    create_at = models.DateField (auto_now_add=True)
+    
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tlb_members'
         ordering = ['id_member']
 
@@ -102,7 +104,7 @@ class TlbStatusCivil(models.Model):
     desc_civil = models.CharField(db_column='Desc_civil', max_length=100)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tlb_status_Civil'
 
     def __str__(self):
