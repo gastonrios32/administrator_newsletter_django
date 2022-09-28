@@ -1,0 +1,47 @@
+{% extends 'newsletterApp/layout.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container-fluid ">
+    <br>
+    {% for post  in List_post %}
+    <div class="card text-center">
+        <div class="card-header">
+            {{post.title}}
+        </div>
+        <div class="card-body">
+            {% if post.image %}
+            <center><img height="360px" class="rounded" src="{{post.image.url}}" alt="imagen_post"></center>
+            {% else %}
+            <center><img height="360px" class="rounded" src="{% static 'newsletterApp/img/SinImagen.jpg' %}" alt="imagen"></center>
+            {% endif %}
+        <br>    
+        <h5 class="card-title">{{post.description}}</h5>
+            <p class="card-text">{{post.author}}</p>
+            <a href="#" class="btn btn-primary">VER MAS</a>
+            <a href="#" class="btn btn-primary">Comentar</a>
+        </div>
+        <div class="card-footer text-muted">
+            <p>{{post.create_at}}</p>
+        </div>
+    </div>
+    <br>
+    {% endfor %} 
+    <div class="pagination pagination-lg">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Previa</a>
+            {% endif %}
+            <span class="current">
+                Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Siguente</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Ultima &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</section>
+{% endblock content %}
