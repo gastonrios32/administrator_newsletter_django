@@ -4,10 +4,21 @@
 
 <section class="container-fluid ">
     <br>
+
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">
+            {{message}}
+        </div>
+    {% endfor %}
+    {% endif %}
+    
+    <br>
+
     {% for post  in List_post %}
     <div class="card text-center">
         <div class="card-header">
-            {{post.title}}
+            <b>{{post.title}}</b>
         </div>
         <div class="card-body">
             {% if post.image %}
@@ -16,13 +27,19 @@
             <center><img height="360px" class="rounded" src="{% static 'newsletterApp/img/SinImagen.jpg' %}" alt="imagen"></center>
             {% endif %}
         <br>    
-        <h5 class="card-title">{{post.description}}</h5>
-            <p class="card-text">{{post.author}}</p>
-            <a href="#" class="btn btn-primary">VER MAS</a>
-            <a href="#" class="btn btn-primary">Comentar</a>
+        <h5 class="card-title">{{post.description|slice:"0:150"}} .....</h5>
+            <p class="card-text">Publicado por : {{post.author}}</p>
+            <div class="d-grid gap-2">
+                <a  href="#" class="btn btn-primary" type="button">VER MAS</a>
+            </div>
+            <br>
+            {% if user.is_staff == True and user.is_superuser == True %}
+            <a href="{% url 'post_update' post.id_post %}" class="btn btn-primary">EDITAR</a>
+            <a href="{% url 'post_delete' post.id_post %}" class="btn btn-primary">ELIMINAR</a>
+            {% endif %}
         </div>
         <div class="card-footer text-muted">
-            <p>{{post.create_at}}</p>
+            <p><b>Fecha de publicacion : {{post.create_at}}</b></p>
         </div>
     </div>
     <br>
@@ -36,7 +53,6 @@
             <span class="current">
                 Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
             </span>
-
             {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}">Siguente</a>
                 <a href="?page={{ page_obj.paginator.num_pages }}">Ultima &raquo;</a>

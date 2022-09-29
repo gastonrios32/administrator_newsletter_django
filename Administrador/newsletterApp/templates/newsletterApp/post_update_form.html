@@ -1,0 +1,35 @@
+{% extends 'newsletterApp/layout.html' %}
+{% load static %}
+{% block content %}
+<br>
+<section class="container-fluid ">
+
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">
+            {{message}}
+        </div>
+    {% endfor %}
+    {% endif %}
+
+
+    <div class="card text-center">
+        <div class="card-header">
+            {{ title }}
+        </div>
+        <div class="card-body">
+            <form method="POST" class="form-control" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.errors}}
+                {{ form.as_p }}
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <input class="btn btn-primary" type="submit" value="EDITAR" />
+                    <a class="btn btn-primary"  href="{% url 'inicio' %}">Inicio</a>
+                </div >     
+        </form>
+        </div>
+    </div>
+
+</section>
+
+{% endblock content %}

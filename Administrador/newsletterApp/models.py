@@ -16,7 +16,7 @@ class Post(models.Model):
     description=models.TextField()
     link=models.URLField(blank=True,default="")
     create_at = models.DateField (auto_now_add=True)
-    image=models.ImageField(upload_to='post/',null=True,blank= True)
+    image=models.ImageField(upload_to='post',null=True,blank= True)
     
     def __str__(self):
         return f'Author {self.author.username} - Tittle {self.title}'
