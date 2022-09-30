@@ -1,0 +1,62 @@
+{% extends 'newsletterApp/layout.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container">
+    <br>
+<div class="card text-center">
+   
+    <div class="card-header">
+
+        <b>{{object.title}}</b>
+    </div>
+    <div class="card-body">
+        {% if object.image %}
+        <center><img height="360px" class="rounded" src="{{object.image.url}}" alt="imagen_post"></center>
+        {% else %}
+        <center><img height="360px" class="rounded" src="{% static 'newsletterApp/img/SinImagen.jpg' %}" alt="imagen"></center>
+        {% endif %}
+    <br>    
+    <h5 class="card-title">{{object.description}} </h5>
+        <p class="card-text">Publicado por : {{object.author}}</p>
+        <br>
+        {% if user.is_staff == True and user.is_superuser == True %}
+        <a href="{% url 'post_update' object.id_post %}" class="btn btn-primary">EDITAR</a>
+        <a href="{% url 'post_delete' object.id_post %}" class="btn btn-primary">ELIMINAR</a>
+        {% endif %}
+    </div>
+    <div class="card-footer text-muted">
+        <p><b>Fecha de publicacion : {{object.create_at}}</b></p>
+    </div>
+    <div class="d-grid gap-2">
+        <a  href="#" class="btn btn-primary" type="button">COMENTAR</a>
+        <a class="btn btn-primary"  href="{% url 'inicio' %}">Inicio</a>
+    </div>
+
+</div>
+<br>
+<h4>Comentarios ...</h4>
+<br>
+{% if not post.comments.all %}
+    SIN COMENTARIOS ..
+    <br>
+    <a  href="#" class="btn btn-primary" type="button">AGREGAR COMENTARIO</a>
+{% else %}
+    {% for c  in post.comments.all %}
+        <div class="card">
+            <div class="card-header">
+                <p> {{c.content}} </p>
+                <br>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                <footer class="blockquote-footer">Publicado por: {{c.user}} ({{c.name}}) <cite title="Source Title">en {{c.Date_coment}}</cite></footer>
+                </blockquote>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+</section>
+{% endblock content %}

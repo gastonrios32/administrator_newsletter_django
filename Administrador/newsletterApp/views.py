@@ -23,6 +23,16 @@ class postList(ListView):
     def get_queryset(self):
         queryset = Post.objects.all()
         return queryset
+
+class postDetail(DetailView):
+    model = Post
+    template_name = "newsletterApp/post_detail.html"
+
+
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id_post')
+        return Post.objects.get(id_post=kw_id) 
     
 class postnew(CreateView):
     model = Post
@@ -67,3 +77,4 @@ class postdelete(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, f'The post has been deleted successfully.')
         return super().form_valid(form)  
+    
