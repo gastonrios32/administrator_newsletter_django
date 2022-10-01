@@ -1,0 +1,18 @@
+{% extends 'newsletterApp/layout.html' %}
+{% load static %}
+{% block content %}
+
+<div class="card text-center">
+    <div class="card-header">
+        <b>BORRAR ETIQUETA</b>
+    </div>
+    <div class="card-body">
+        <form method="POST">{% csrf_token %}
+        <h5 class="card-title">¿ESTAS SEGURO QUE DESEAS LA ETIQUETA:"{{ object.name }}" ?</h5>
+        <p class="card-text">Una vez confirmada se borrara toda la informacion relacionada</p>
+        <input class="btn btn-secondary" type="submit" value="CONFIRMAR" />
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

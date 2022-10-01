@@ -1,0 +1,62 @@
+{% extends 'newsletterApp/layout.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container-fluid ">
+  <br>
+  <div class="d-grid gap-2 col-6 ">
+    <a href="{% url 'new_tag' %}" class="btn btn-primary" type="button">NUEVA ETIQUETA</a>
+  </div>
+  <br>
+    <table class="table">
+        <thead>
+            <tr class="table-success">
+            <th scope="col">ID</th>
+            <th scope="col">NOMBRE ETIQUETA</th>
+            <th scope="col"></th>
+            </tr>
+        </thead>
+        {% for tag  in List_tags %}
+        <tbody>
+          <tr>
+            <td>{{tag.id_tag}}</td>
+            <td>{{tag.name}}</td>
+
+            <td>
+              <div class="dropdown">
+                  <button class="btn btn-outline-danger  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Acciones
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a  class="dropdown-item" href="{% url 'tags_Update' tag.id_tag %}" type="button">Modificar</a></li>
+                    <li><a  class="dropdown-item" href="{% url 'tags_delete' tag.id_tag %}" type="button">Eliminar</a></li>
+                  </ul>
+                  
+                </div>
+                
+              </td>
+          </tr>
+ 
+        </tbody>
+        {% endfor %}     
+      </table>
+      <div class="pagination pagination-lg">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Previa</a>
+            {% endif %}
+
+            <span class="current">
+                Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Siguente</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Ultima &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</section>
+
+{% endblock content %}

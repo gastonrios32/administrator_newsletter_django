@@ -29,7 +29,7 @@
         <p><b>Fecha de publicacion : {{object.create_at}}</b></p>
     </div>
     <div class="d-grid gap-2">
-        <a  href="#" class="btn btn-primary" type="button">COMENTAR</a>
+        <a  href="{% url 'comment_new' %}" class="btn btn-primary" type="button">COMENTAR</a>
         <a class="btn btn-primary"  href="{% url 'inicio' %}">Inicio</a>
     </div>
 
@@ -38,9 +38,11 @@
 <h4>Comentarios ...</h4>
 <br>
 {% if not post.comments.all %}
-    SIN COMENTARIOS ..
+    <p>Esta publicacion aun no tiene comentarios . Se el primero ..</p>
     <br>
-    <a  href="#" class="btn btn-primary" type="button">AGREGAR COMENTARIO</a>
+    <br>
+    <a  href="{% url 'comment_new' %}" class="btn btn-primary" type="button">AGREGAR COMENTARIO</a>
+    <br>
 {% else %}
     {% for c  in post.comments.all %}
         <div class="card">
@@ -52,6 +54,10 @@
                 <blockquote class="blockquote mb-0">
                 <footer class="blockquote-footer">Publicado por: {{c.user}} ({{c.name}}) <cite title="Source Title">en {{c.Date_coment}}</cite></footer>
                 </blockquote>
+                <div class="d-grid gap-2">
+                    <a  href="{% url 'comment_Update' c.id %}" class="btn btn-primary" type="button">EDITAR</a>
+                    <a  href="{% url 'comment_delete' c.id %}" class="btn btn-primary" type="button">ELIMINAR</a>                    
+                </div>
             </div>
         </div>
     {% endfor %}

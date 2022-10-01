@@ -21,9 +21,9 @@
             <div class="list-group list-group-flush">
                 {% if user.is_staff == True and user.is_superuser == True %}
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'inicio_administrador' %}">Administrador</a>
-                {% endif %}
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'new_post' %}">Nueva Publicacion</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Mostrar por categoria</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'tags_list' %}">Administrar etiquetas</a>               
+                {% endif %}
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Eventos</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Publicacion importante</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Contactanos</a>
@@ -38,15 +38,16 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                            <li class="nav-item active"><a class="nav-link" href="{% url 'inicio' %}"><i class="bi bi-house"></i></a></li>
+                            <li class="nav-item active"><a class="nav-link" href="{% url 'inicio' %}"><i class="bi bi-house-door-fill"></i></a></li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bienvenido, {{ user.name }}</a>
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bienvenido, {{ user.username | lower }}</a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="#!">Editar Perfil</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#!">Desloguarse</a>
+                                    <a class="dropdown-item" href="{% url 'logout' %}">Desloguarse</a>
                                 </div>
                             </li>
+                            
                         </ul>
                     </div>
                 </div>

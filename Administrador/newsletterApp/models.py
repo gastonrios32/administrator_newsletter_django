@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class tags(models.Model):
-    id_tag = models.AutoField(primary_key=True)
+    id_tag = models.AutoField(primary_key=True )
     name=models.CharField( max_length=100)
     def __str__(self):
         return f'{self.name} '
