@@ -6,9 +6,8 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView,DeleteView,UpdateView
 from django.contrib import messages
-from django.contrib.auth import login,logout, authenticate
-from django.contrib.auth.forms import AuthenticationForm
 
+from django.contrib.auth.mixins import LoginRequiredMixin,AccessMixin,PermissionRequiredMixin
 # Create your views here.
 
 from django.shortcuts import render
@@ -18,20 +17,28 @@ from django.shortcuts import render
 def inicio (request):
     return render(request, 'newsletterApp/index.html')
 
+class LogoutIfNotStaffMixin(AccessMixin):
+        def dispatch(self, request, *args, **kwargs):
+            if not request.user.is_staff:
+                return self.handle_no_permission()
+            return super(LogoutIfNotStaffMixin, self).dispatch(request, *args, **kwargs)
+
 class postList(ListView):
     template_name = "newsletterApp/index.html"
     paginate_by = 4
     context_object_name = 'List_post'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
         queryset = Post.objects.all()
         return queryset
 
     
-class tagList(ListView):
+class tagList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
     template_name = "newsletterApp/list_tags.html"
     paginate_by = 4
     context_object_name = 'List_tags'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
         queryset = tags.objects.all()
@@ -40,6 +47,7 @@ class tagList(ListView):
 class postDetail(DetailView):
     model = Post
     template_name = "newsletterApp/post_detail.html"
+    permission_required = 'is_staff'
 
 
     def get_object(self, *args, **kwargs):
@@ -47,11 +55,12 @@ class postDetail(DetailView):
         kw_id = kwargs.get('id_post')
         return Post.objects.get(id_post=kw_id) 
     
-class postnew(CreateView):
+class postnew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
     model = Post
     form_class= Post_form
     template_name = 'newsletterApp/post_form.html'
     success_url = reverse_lazy('inicio')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -60,13 +69,15 @@ class postnew(CreateView):
     
     def form_valid(self, form):
         messages.success(self.request, f'post created successfully')
-        return super().form_valid(form)   
+        return super().form_valid(form) 
 
-class tagsnew(CreateView):
+
+class tagsnew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
     model = tags
     form_class= tags_form
     template_name = 'newsletterApp/tags_form.html'
     success_url = reverse_lazy('new_tag')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -82,21 +93,29 @@ class Commentnew(CreateView):
     form_class= Comment_form
     template_name = 'newsletterApp/comment_form.html'
     success_url = reverse_lazy('inicio')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'NUEVA COMENTARIO'
+        
+        
         return context
     
     def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
         messages.success(self.request, f'Comment created successfully')
+        
         return super().form_valid(form) 
     
-class postUpdate (UpdateView):
+class postUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = Post
     fields = ['title','tag','description','link','image']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('inicio')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -107,11 +126,12 @@ class postUpdate (UpdateView):
         messages.success(self.request, f'Los datos fueron actualizados ')
         return super().form_valid(form) 
 
-class tagsUpdate (UpdateView):
+class tagsUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = tags
     fields = ['name']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('inicio')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -127,6 +147,7 @@ class commentUpdate (UpdateView):
     fields = ['name','content']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('inicio')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -141,6 +162,7 @@ class postdelete(DeleteView):
     model = Post
     success_url=reverse_lazy('inicio')
     template_name='newsletterApp/post_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -151,10 +173,11 @@ class postdelete(DeleteView):
         messages.success(self.request, f'The post has been deleted successfully.')
         return super().form_valid(form)  
 
-class tagsdelete(DeleteView):
+class tagsdelete(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DeleteView):
     model = tags
     success_url=reverse_lazy('inicio')
     template_name='newsletterApp/tags_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -169,6 +192,7 @@ class tagsdelete(DeleteView):
     model = tags
     success_url=reverse_lazy('inicio')
     template_name='newsletterApp/tags_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -183,6 +207,7 @@ class commentdelete(DeleteView):
     model = Comment
     success_url=reverse_lazy('inicio')
     template_name='newsletterApp/comment_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs

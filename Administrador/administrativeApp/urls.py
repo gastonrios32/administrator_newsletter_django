@@ -3,7 +3,7 @@ from . import views
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-path('',login_required(views.inicio_administrador), name = 'inicio_administrador'),
+path('',login_required(views.administrador.as_view()), name = 'inicio_administrador'),
 
 
 #LISTVIEW

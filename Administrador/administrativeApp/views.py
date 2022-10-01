@@ -2,66 +2,82 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from .forms import memberform,memberdetailform,MemberJobform,Memberphoneform,MemberEmailform
 from .models import *
-from django.views.generic import ListView
+from django.views.generic import ListView,TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView,DeleteView,UpdateView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin,AccessMixin,PermissionRequiredMixin
+
+
+class LogoutIfNotStaffMixin(AccessMixin):
+        def dispatch(self, request, *args, **kwargs):
+            if not request.user.is_staff:
+                return self.handle_no_permission()
+            return super(LogoutIfNotStaffMixin, self).dispatch(request, *args, **kwargs)
+
 
 # Create your views here.
 
-def inicio_administrador (request):
 
-    return render(request, 'administrativeApp/index.html')
+class administrador(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,TemplateView):
+    template_name = "administrativeApp/index.html"
+    permission_required = 'is_staff'
 
 
-class membersList(ListView):
+class membersList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
     template_name = "administrativeApp/List_members.html"
     paginate_by = 4
     context_object_name = 'listMembers'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
         queryset = TlbMemberDetail.objects.select_related('id_member')
         return queryset
 
-class memberDetailList(ListView):
+class memberDetailList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
     template_name = "administrativeApp/List_memberdetail.html"
     paginate_by = 4
     context_object_name = 'listMemberdetail'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
         queryset = TlbMemberDetail.objects.select_related('id_member')
         return queryset   
     
-class memberjobList(ListView):
+class memberjobList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
     template_name = "administrativeApp/List_memberjob.html"
     paginate_by = 4
     context_object_name = 'listMemberjob'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
         queryset = TlbMemberJob.objects.select_related('id_member')
         return queryset
 
-class memberphoneList(ListView):
+class memberphoneList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
     template_name = "administrativeApp/List_memberphone.html"
     paginate_by = 4
     context_object_name = 'listMemberphone'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
         queryset = tlb_member_phone.objects.select_related('id_member')
         return queryset
 
-class memberemailList(ListView):
+class memberemailList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
     template_name = "administrativeApp/List_memberemail.html"
     paginate_by = 4
     context_object_name = 'listMemberemail'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
         queryset = TlbMemberEmail.objects.select_related('id_member')
         return queryset   
 
-class memberDetail(DetailView):
+class memberDetail(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DetailView):
     model = TlbMemberDetail
     template_name = "administrativeApp/member_detail.html"
+    permission_required = 'is_staff'
 
 
     def get_object(self, *args, **kwargs):
@@ -69,9 +85,10 @@ class memberDetail(DetailView):
         kw_id = kwargs.get('id_member')
         return TlbMemberDetail.objects.get(id_member=kw_id) 
     
-class memberDetail_job(DetailView):
+class memberDetail_job(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DetailView):
     model = TlbMemberJob
     template_name = "administrativeApp/member_detail_job.html"
+    permission_required = 'is_staff'
 
 
     def get_object(self, *args, **kwargs):
@@ -81,18 +98,20 @@ class memberDetail_job(DetailView):
     
 
     
-class memberDetail_phone(DetailView):
+class memberDetail_phone(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DetailView):
     model = tlb_member_phone
     template_name = "administrativeApp/member_detail_phone.html"
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
         return tlb_member_phone.objects.get(id_member=kw_id)    
     
-class memberDetail_email(DetailView):
+class memberDetail_email(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DetailView):
     model = TlbMemberEmail
     template_name = "administrativeApp/member_detail_email.html"
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -101,11 +120,12 @@ class memberDetail_email(DetailView):
 
 #CREATE VIEW
     
-class membernew(CreateView):
+class membernew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
     model = TlbMembers
     form_class= memberform
     template_name = 'administrativeApp/TlbMembers_form.html'
     success_url = reverse_lazy('new_member_detail')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -116,11 +136,12 @@ class membernew(CreateView):
         messages.success(self.request, f'Account created successfully')
         return super().form_valid(form)    
 
-class memberdetailnew(CreateView):
+class memberdetailnew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
     model = TlbMemberDetail
     form_class= memberdetailform
     template_name = 'administrativeApp/TlbMemberDetail_form.html'
     success_url = reverse_lazy('new_member_detail')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,11 +152,12 @@ class memberdetailnew(CreateView):
         messages.success(self.request, f'Los datos fueron cargados ')
         return super().form_valid(form)   
 
-class MemberJobnew(CreateView):
+class MemberJobnew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
     model = TlbMemberJob
     form_class= MemberJobform
     template_name = 'administrativeApp/TlbMemberJob_form.html'
     success_url = reverse_lazy('new_Member_Job')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -146,11 +168,12 @@ class MemberJobnew(CreateView):
         messages.success(self.request, f'Los datos fueron cargados ')
         return super().form_valid(form)      
 
-class Memberphonenew(CreateView):
+class Memberphonenew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
     model = tlb_member_phone
     form_class= Memberphoneform
     template_name = 'administrativeApp/TlbMemberPhone_form.html'
     success_url = reverse_lazy('new_Member_phone')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -160,11 +183,12 @@ class Memberphonenew(CreateView):
     def form_valid(self, form):
         messages.success(self.request, f'Los datos fueron cargados ')
         return super().form_valid(form)      
-class MemberEmailnew(CreateView):
+class MemberEmailnew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
     model = TlbMemberEmail
     form_class= MemberEmailform
     template_name = 'administrativeApp/TlbMemberEmail.html'
     success_url = reverse_lazy('new_Member_email')
+    permission_required = 'is_staff'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -175,11 +199,12 @@ class MemberEmailnew(CreateView):
         messages.success(self.request, f'Los datos fueron cargados ')
         return super().form_valid(form)      
 
-class MemberUpdate (UpdateView):
+class MemberUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = TlbMembers
     fields = ['member_name','status_memb']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('members')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -190,11 +215,12 @@ class MemberUpdate (UpdateView):
         messages.success(self.request, f'Los datos fueron actualizados ')
         return super().form_valid(form)  
     
-class MemberDetailUpdate (UpdateView):
+class MemberDetailUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = TlbMemberDetail
     fields = ['date_bith','direction','civil_status','dependents']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('member_detail_list')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -205,11 +231,12 @@ class MemberDetailUpdate (UpdateView):
         messages.success(self.request, f'Los datos fueron actualizados ')
         return super().form_valid(form)      
     
-class MemberPhoneUpdate (UpdateView):
+class MemberPhoneUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = tlb_member_phone
     fields = ['phone1','type_phone','status_fone']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('member_phone_list')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -220,11 +247,12 @@ class MemberPhoneUpdate (UpdateView):
         messages.success(self.request, f'Los datos fueron actualizados ')
         return super().form_valid(form)           
     
-class MemberJobUpdate (UpdateView):
+class MemberJobUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = TlbMemberJob
     fields = ['id_position','date_entry','direction','job_name']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('member_job_list')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -235,11 +263,12 @@ class MemberJobUpdate (UpdateView):
         messages.success(self.request, f'Los datos fueron actualizados ')
         return super().form_valid(form)              
     
-class MemberEmailUpdate (UpdateView):
+class MemberEmailUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = TlbMemberEmail
     fields = ['email']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('member_email_list')
+    permission_required = 'is_staff'
     
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -250,10 +279,11 @@ class MemberEmailUpdate (UpdateView):
         messages.success(self.request, f'Los datos fueron actualizados ')
         return super().form_valid(form)            
 
-class memberdelete(DeleteView):
+class memberdelete(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DeleteView):
     model = TlbMembers
     success_url=reverse_lazy('members')
     template_name='administrativeApp/member_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -264,10 +294,11 @@ class memberdelete(DeleteView):
         messages.success(self.request, f'The member has been deleted successfully.')
         return super().form_valid(form)      
     
-class memberJobdelete(DeleteView):
+class memberJobdelete(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DeleteView):
     model = TlbMemberJob
     success_url=reverse_lazy('member_job_list')
     template_name='administrativeApp/member_job_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -277,10 +308,11 @@ class memberJobdelete(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, f'The member has been deleted successfully.')
         return super().form_valid(form)        
-class memberPhonedelete(DeleteView):
+class memberPhonedelete(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DeleteView):
     model = tlb_member_phone
     success_url=reverse_lazy('member_phone_list')
     template_name='administrativeApp/member_phone_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
@@ -292,10 +324,11 @@ class memberPhonedelete(DeleteView):
         return super().form_valid(form)        
     
     
-class memberEmaildelete(DeleteView):
+class memberEmaildelete(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DeleteView):
     model = TlbMemberEmail
     success_url=reverse_lazy('member_email_list')
     template_name='administrativeApp/member_email_delete.html'
+    permission_required = 'is_staff'
 
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs

@@ -54,10 +54,12 @@
                 <blockquote class="blockquote mb-0">
                 <footer class="blockquote-footer">Publicado por: {{c.user}} ({{c.name}}) <cite title="Source Title">en {{c.Date_coment}}</cite></footer>
                 </blockquote>
+                {% if user.is_staff == True and user.is_superuser == True %}
                 <div class="d-grid gap-2">
                     <a  href="{% url 'comment_Update' c.id %}" class="btn btn-primary" type="button">EDITAR</a>
                     <a  href="{% url 'comment_delete' c.id %}" class="btn btn-primary" type="button">ELIMINAR</a>                    
                 </div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

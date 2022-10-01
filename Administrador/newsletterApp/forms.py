@@ -31,11 +31,12 @@ class Comment_form(ModelForm):
         super().__init__ ( *args , **kwargs )
         for form in self.visible_fields ( ) :
             form.field.widget.attrs ['class'] = 'form-control'
-            form.field.widget.attrs ['autocomplete '] = 'off'    
+            form.field.widget.attrs ['autocomplete '] = 'off'
     class Meta:
             model = Comment
-            fields = ['post','name','user','content']
-            labels = {'post' : 'Post' , 'name' : 'Nombre y Apellido' , 'user' : 'Usuario', 'content' : 'Contenido'  } 
+            fields = ['post','name','content']
+            
+            labels = {'post' : 'Post' , 'name' : 'Nombre y Apellido' , 'content' : 'Contenido'  } 
 
 class UserEditForm(UserCreationForm):
     email= forms.EmailField(label= "Modificar Email")
