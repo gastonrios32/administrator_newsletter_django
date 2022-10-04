@@ -30,7 +30,17 @@ class postList(ListView):
     permission_required = 'is_staff'
     
     def get_queryset(self):
-        queryset = Post.objects.all()
+        queryset = Post.objects.all().order_by('-create_at')
+        return queryset
+
+class postListimportant(ListView):
+    template_name = "newsletterApp/List_post_Important.html"
+    paginate_by = 4
+    context_object_name = 'List_post_important'
+    permission_required = 'is_staff'
+    
+    def get_queryset(self):
+        queryset = Post.objects.all().filter(is_important='True').order_by('-create_at')
         return queryset
 
     
@@ -42,6 +52,14 @@ class tagList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,
     
     def get_queryset(self):
         queryset = tags.objects.all()
+        return queryset
+
+class calendarList(ListView):
+    template_name = "newsletterApp/calendar.html"
+    model= events_calendar
+    
+    def get_queryset(self):
+        queryset = events_calendar.objects.all()
         return queryset
 
 class postDetail(DetailView):
@@ -68,6 +86,9 @@ class postnew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,
         return context
     
     def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
         messages.success(self.request, f'post created successfully')
         return super().form_valid(form) 
 
@@ -112,7 +133,7 @@ class Commentnew(CreateView):
     
 class postUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = Post
-    fields = ['title','tag','description','link','image']
+    fields = ['title','tag','description','link','image','is_important']
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('inicio')
     permission_required = 'is_staff'

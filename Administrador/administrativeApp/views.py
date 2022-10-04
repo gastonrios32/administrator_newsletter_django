@@ -1,3 +1,6 @@
+from datetime import datetime
+from itertools import count
+from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from .forms import memberform,memberdetailform,MemberJobform,Memberphoneform,MemberEmailform
@@ -18,10 +21,6 @@ class LogoutIfNotStaffMixin(AccessMixin):
 
 # Create your views here.
 
-
-class administrador(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,TemplateView):
-    template_name = "administrativeApp/index.html"
-    permission_required = 'is_staff'
 
 
 class membersList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):

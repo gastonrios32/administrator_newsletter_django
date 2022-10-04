@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
 path('',login_required(views.postList.as_view()), name="inicio" ),
 path('tags/',login_required(views.tagList.as_view()), name="tags_list" ),
+path('post_Important/',login_required(views.postListimportant.as_view()), name="list_post_Important" ),
+path('Calendar/',login_required(views.calendarList.as_view()), name="Calendar_events" ),
+
 
 path('post_new/',login_required(views.postnew.as_view()), name="new_post" ),
 path('tag_new/',login_required(views.tagsnew.as_view()), name="new_tag" ),

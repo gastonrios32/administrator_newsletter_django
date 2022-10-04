@@ -21,7 +21,7 @@
             <form method="POST" class="form-control" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form.errors}}
-                {{ form.as_p }}
+                {{ form.as_p }}          
                 <div class="d-grid gap-2 col-6 mx-auto">
                     <input class="btn btn-primary" type="submit" value="ENVIAR" />
                     <a class="btn btn-primary"  href="{% url 'inicio' %}">Inicio</a>
