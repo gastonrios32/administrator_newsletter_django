@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from .forms import *
 from .models import *
-from django.views.generic import ListView
+from django.views.generic import ListView,TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView,DeleteView,UpdateView
 from django.contrib import messages
@@ -54,12 +54,24 @@ class tagList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,
         queryset = tags.objects.all()
         return queryset
 
-class calendarList(ListView):
-    template_name = "newsletterApp/calendar.html"
-    model= events_calendar
+class CalendarPage(TemplateView):
+    template_name = 'newsletterApp/calendar.html'
+    form_class = Calendar_form
+
+    def get_context_data(self, **kwargs):
+        context = super(CalendarPage, self).get_context_data(**kwargs)
+        context['eventlist'] = events_calendar.objects.all()
+        return context
+
+
+class eventsList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
+    template_name = "newsletterApp/list_events.html"
+    paginate_by = 10
+    context_object_name = 'List_events'
+    permission_required = 'is_staff'
     
     def get_queryset(self):
-        queryset = events_calendar.objects.all()
+        queryset = events_calendar.objects.all().order_by('-date_start')
         return queryset
 
 class postDetail(DetailView):
@@ -119,8 +131,6 @@ class Commentnew(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'NUEVA COMENTARIO'
-        
-        
         return context
     
     def form_valid(self, form):
@@ -130,7 +140,22 @@ class Commentnew(CreateView):
         messages.success(self.request, f'Comment created successfully')
         
         return super().form_valid(form) 
+
+class eventnew(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,CreateView):
+    model = events_calendar
+    form_class= Calendar_form
+    template_name = 'newsletterApp/events_form.html'
+    success_url = reverse_lazy('Calendar_events')
+    permission_required = 'is_staff'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'NUEVO EVENTO'
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'Event created successfully')
+        return super().form_valid(form)   
 class postUpdate (LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,UpdateView):
     model = Post
     fields = ['title','tag','description','link','image','is_important']
@@ -174,6 +199,22 @@ class commentUpdate (UpdateView):
         kwargs = self.kwargs
         kw_id = kwargs.get('id')
         return Comment.objects.get(id=kw_id) 
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Los datos fueron actualizados ')
+        return super().form_valid(form) 
+
+class eventUpdate (UpdateView):
+    model = events_calendar
+    fields = ['title','date_start','date_end']
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('Calendar_events')
+    permission_required = 'is_staff'
+    
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id')
+        return events_calendar.objects.get(id=kw_id) 
 
     def form_valid(self, form):
         messages.success(self.request, f'Los datos fueron actualizados ')
@@ -239,23 +280,52 @@ class commentdelete(DeleteView):
         messages.success(self.request, f'The comment has been deleted successfully.')
         return super().form_valid(form)  
 
-# def login_request(request):
-#     if request.method == 'POST':
-#         form = AuthenticationForm (request, data = request.POST)
-    
-#         if form.is_valid():
-            
-#             data = form.cleaned_data
-#             user = authenticate(username=data['username'], password=data['password'])
-        
-#             if user is not None :
-#                 login(request, user)
-#                 return render(request, "newsletterApp/index.html", {"mensaje" : f"Bienvenido {user.get_username()}" } )
-#             else:
-#                 return render (request, "newsletterApp/index.html", {"mensaje" : f"Usuario o Contraseña Incorrecta"} )
-#         else:
-#             return render(request, "newsletterApp/index.html", {"mensaje" : f"Error, formulario erroneo"} )
-#     else:
-#         form = AuthenticationForm()
-#         return render (request, "newsletterApp/login.html", {'form':form})
+class eventsdelete(DeleteView):
+    model = events_calendar
+    success_url=reverse_lazy('Calendar_events')
+    template_name='newsletterApp/events_delete.html'
+    permission_required = 'is_staff'
 
+    def get_object(self, *args, **kwargs):
+        kwargs = self.kwargs
+        kw_id = kwargs.get('id')
+        return events_calendar.objects.get(id=kw_id)    
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'The tag has been deleted successfully.')
+        return super().form_valid(form)  
+
+def editarPerfil(request):
+    
+    usuario = request.user
+    
+    if request.method == 'POST':
+        miform= UserEditForm(request.POST)
+        if miform.is_valid():
+            
+            informacion = miform.cleaned_data
+            
+            usuario.email= informacion['email']
+            usuario.password1 = informacion['password1']
+            usuario.password2 = informacion['password2']
+            usuario.last_name = informacion['last_name']
+            usuario.first_name = informacion ['first_name']
+            usuario.save()
+            
+            return render (request, "newsletterApp/index.html", {"mensaje" :"Usuario Modificado  "})
+    else:
+        miform = UserEditForm(initial={'email':usuario.email,'first_name':usuario.first_name, 'last_name': usuario.last_name })
+        
+    return render (request, "newsletterApp/editarPerfil.html", {"miform":miform,"usuario":usuario})
+
+
+
+class register(CreateView):
+    model = User
+    form_class= UserregisterForm
+    template_name = 'newsletterApp/register.html'
+    success_url = reverse_lazy('login')
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'User created successfully')
+        return super().form_valid(form) 

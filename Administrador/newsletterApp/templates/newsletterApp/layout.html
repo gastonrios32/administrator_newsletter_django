@@ -25,7 +25,7 @@
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'new_post' %}">Nueva Publicacion</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'tags_list' %}">Administrar etiquetas</a>               
                 {% endif %}
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Eventos</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'Calendar_events' %}">Eventos Importantes</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'list_post_Important' %}">Publicaciones importantes</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Contactanos</a>
             </div>
@@ -43,7 +43,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bienvenido, {{ user.username | lower }}</a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#!">Editar Perfil</a>
+                                    <a class="dropdown-item" href="{% url 'EditarPerfil' %}">Editar Perfil</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'logout' %}">Desloguarse</a>
                                 </div>
@@ -90,6 +90,7 @@
     <script src="{% static 'newsletterApp/js/scripts.js' %}"></script>
     <script src="{% static 'newsletterApp/lib/fullcalendar/lib/main.js' %}"></script>    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="{% static 'newsletterApp/lib/fullcalendar/lib/locales-all.js' %}"></script> 
 </body>
 
 </html>

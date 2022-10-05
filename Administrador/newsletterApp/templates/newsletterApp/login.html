@@ -14,6 +14,14 @@
 </head>
 <body>
 
+  {% if messages %}
+  {% for message in messages %}
+      <div class="alert alert-{{message.tags}}">
+          {{message}}
+      </div>
+  {% endfor %}
+  {% endif %}
+
   <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -39,7 +47,7 @@
               </form>
   
               <div>
-                <p class="mb-0">¿Aun no tiene una cuenta ? <a href="#!" class="text-white-50 fw-bold">REGISTRARSE</a>
+                <p class="mb-0">¿Aun no tiene una cuenta ? <a href="{% url 'register' %}" class="text-white-50 fw-bold">REGISTRARSE</a>
                 </p>
               </div>
   
