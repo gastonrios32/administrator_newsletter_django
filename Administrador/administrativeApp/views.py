@@ -1,6 +1,3 @@
-from datetime import datetime
-from itertools import count
-from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from .forms import memberform,memberdetailform,MemberJobform,Memberphoneform,MemberEmailform
@@ -10,6 +7,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView,DeleteView,UpdateView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin,AccessMixin,PermissionRequiredMixin
+from django.db.models import Count, Q
 
 
 class LogoutIfNotStaffMixin(AccessMixin):
@@ -20,8 +18,6 @@ class LogoutIfNotStaffMixin(AccessMixin):
 
 
 # Create your views here.
-
-
 
 class membersList(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,ListView):
     template_name = "administrativeApp/List_members.html"
@@ -82,7 +78,7 @@ class memberDetail(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffM
     def get_object(self, *args, **kwargs):
         kwargs = self.kwargs
         kw_id = kwargs.get('id_member')
-        return TlbMemberDetail.objects.get(id_member=kw_id) 
+        return TlbMemberDetail.objects.get(id_member=kw_id)
     
 class memberDetail_job(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotStaffMixin,DetailView):
     model = TlbMemberJob
@@ -338,3 +334,10 @@ class memberEmaildelete(LoginRequiredMixin,PermissionRequiredMixin, LogoutIfNotS
         messages.success(self.request, f'The member has been deleted successfully.')
         return super().form_valid(form)                  
 
+def job_class_view(request):
+    dataset = TlbMemberJob.objects \
+        .values('id_position') \
+        .annotate(job_count=Count('job_id')) \
+        .order_by('id_position')
+    categorias = TlbJobPosition.objects.all()
+    return render(request, 'administrativeApp/chart.html', {'dataset': dataset, 'categorias': categorias})

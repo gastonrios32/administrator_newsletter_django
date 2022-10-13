@@ -33,6 +33,7 @@ path('accounts/login/', LoginView.as_view(template_name = 'newsletterApp/login.h
 path('logout/', logout_then_login, name="logout" ),
 path('editarPerfil/',views.editarPerfil, name="EditarPerfil" ),
 path('register/',views.register.as_view(), name="register" ),
+path('contact/',views.contact.as_view(), name="contact" ),
 #path('logout/', LogoutView.as_view(), {'template_name': 'newsletterApp/logged_out.html'}, name = 'logout'),
 
 

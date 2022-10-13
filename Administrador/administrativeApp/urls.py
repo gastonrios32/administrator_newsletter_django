@@ -4,10 +4,10 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
 
-
+path('',login_required(views.job_class_view), name="inicio_administrador" ),
 
 #LISTVIEW
-path('',login_required(views.membersList.as_view()), name="members" ),
+path('members/',login_required(views.membersList.as_view()), name="members" ),
 path('memberdetail/',login_required(views.memberDetailList.as_view()), name="member_detail_list" ),
 path('memberjob/',login_required(views.memberjobList.as_view()), name="member_job_list" ),
 path('memberphone/',login_required(views.memberphoneList.as_view()), name="member_phone_list" ),

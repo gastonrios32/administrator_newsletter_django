@@ -329,3 +329,6 @@ class register(CreateView):
     def form_valid(self, form):
         messages.success(self.request, f'User created successfully')
         return super().form_valid(form) 
+
+class contact(TemplateView):
+    template_name = "newsletterApp/contact.html"

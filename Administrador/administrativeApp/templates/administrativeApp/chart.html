@@ -1,0 +1,44 @@
+{% extends 'administrativeApp/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<div id="chart"></div>
+
+<div class="container-fluid ">
+
+    <ul class="list-group list-group-flush">
+        {% for categoria in categorias %}
+        <li class="list-group-item">{{ categoria.id_position }} : {{ categoria.desc_position }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script>
+  Highcharts.chart('chart', {
+      chart: {
+          type: 'column'
+      },
+      title: {
+          text: 'ESTADISTICA DE TRABAJO'
+      },
+      subtitle: {
+        text: 'Por categoria de trabajo'
+    },
+      xAxis: {
+          categories: [
+            {% for entry in dataset %}{{ entry.id_position }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          ]
+      },
+      series: [{
+          name: 'Miembros',
+          data: [
+            {% for entry in dataset %}{{ entry.job_count }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          ],
+          color: 'green'
+      }]
+  });
+</script>
+
+{% endblock contenido %}

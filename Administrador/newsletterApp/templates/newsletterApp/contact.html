@@ -1,0 +1,33 @@
+{% extends 'newsletterApp/layout.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container-fluid ">
+    <br>
+    <br>
+		<div class="form-control">
+			<h1>Contactenos </h1>
+			<form action="">
+				<div class="mb-3">
+					<label for="name" class="form-label">Nombre Completo</label>
+    <br>
+					<input type="text" placeholder="Gaston Rios" name="name" id="name" />
+				</div>
+				<div class="mb-3">
+					<label for="email" class="form-label">Su Email</label>
+    <br>
+					<input type="email" placeholder="gastonrios32@gmail.com" name="email" id="email" />
+				</div>
+
+				<div class="mb-3">
+					<label for="message" class="form-label">Mensaje</label>
+    <br>
+					<textarea class="form-control" placeholder="Ingrese su consulta " rows="6"  name="message" id="message" /></textarea>
+				</div>
+				<button type="submit" class="btn btn-primary">Enviar Email</button>
+			</form>
+		</div>
+
+</section>
+
+{% endblock content %}
